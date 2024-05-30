@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"unicode/utf16"
+    "net/http"
 )
 
 func readUtf16Str(b *bytes.Reader, offset int64, length int) string {
@@ -134,7 +135,54 @@ func save(records []string, f *os.File) []string {
 	return recordsTranslated
 }
 
+
+func downloadFile() error {
+    // 文件URL
+    url := "https://pinyin.sogou.com/d/dict/download_cell.php?id=4&name=%E7%BD%91%E7%BB%9C%E6%B5%81%E8%A1%8C%E6%96%B0%E8%AF%8D%E3%80%90%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90%E3%80%91&f=detail"
+// 保存目录
+    dir := "scel"
+    // 创建保存目录
+    err := os.MkdirAll(dir, 0755)
+    if err != nil {
+        fmt.Printf("创建目录失败: %v\n", err)
+        return err
+    }
+    // 文件名
+    fileName := "网络流行新词【官方推荐】.scel"
+    // 文件路径
+    filePath := filepath.Join(dir, fileName)
+    // 发送GET请求
+    resp, err := http.Get(url)
+    if err != nil {
+        fmt.Errorf("获取文件失败: %v", err)
+        return err
+    }
+    defer resp.Body.Close()
+
+    // 创建文件
+    out, err := os.Create(filePath)
+    if err != nil {
+        fmt.Errorf("创建文件失败: %v", err)
+        return err
+    }
+    defer out.Close()
+
+    // 将响应内容写入文件
+    _, err = io.Copy(out, resp.Body)
+    if err != nil {
+        fmt.Errorf("保存文件失败: %v", err)
+        return err
+    }
+
+    return nil
+}
+
 func main() {
+    err := downloadFile()
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
 	scelFiles, _ := filepath.Glob("./scel/*.scel")
 
 	dictFile := "luna_pinyin.sogou.dict.yaml"
