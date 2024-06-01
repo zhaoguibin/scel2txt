@@ -185,7 +185,7 @@ func main() {
     }
 	scelFiles, _ := filepath.Glob("./scel/*.scel")
 
-	dictFile := "luna_pinyin.sogou.dict.yaml"
+	dictFile := "sogou.new_pop_words.dict.yaml"
 	var dictFileContent []string
 	dictFileHeader := `# Rime dictionary
 # encoding: utf-8
@@ -200,7 +200,7 @@ func main() {
 #
 
 ---
-name: luna_pinyin.sogou
+name: sogou.new_pop_words
 version: "1.0"
 sort: by_weight
 use_preset_vocabulary: true
