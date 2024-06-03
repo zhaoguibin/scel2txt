@@ -140,7 +140,7 @@ func downloadFile() error {
     // 文件URL
     url := "https://pinyin.sogou.com/d/dict/download_cell.php?id=4&name=%E7%BD%91%E7%BB%9C%E6%B5%81%E8%A1%8C%E6%96%B0%E8%AF%8D%E3%80%90%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90%E3%80%91&f=detail"
 // 保存目录
-    dir := "scel"
+    dir := "./scel2txt/scel"
     // 创建保存目录
     err := os.MkdirAll(dir, 0755)
     if err != nil {
@@ -183,7 +183,7 @@ func main() {
         fmt.Println(err)
         return
     }
-	scelFiles, _ := filepath.Glob("./scel/*.scel")
+	scelFiles, _ := filepath.Glob("./scel2txt/scel/*.scel")
 
 	dictFile := "sogou.new_pop_words.dict.yaml"
 	var dictFileContent []string
@@ -212,7 +212,7 @@ use_preset_vocabulary: true
 	}
 	dictFileContent = append(dictFileContent, fmt.Sprintf(dictFileHeader, strings.Join(sogouDictNameList, "\n")))
 
-	outDir := "./out"
+	outDir := "./scel2txt/out"
 	if _, err := os.Stat(outDir); os.IsNotExist(err) {
 		os.Mkdir(outDir, os.ModePerm)
 	}
